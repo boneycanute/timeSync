@@ -1,7 +1,21 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "@n8n/chat/style.css";
 import { createChat } from "@n8n/chat";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Calendar,
+  CalendarEvent,
+  CalendarViewTrigger,
+  CalendarCurrentDate,
+  CalendarPrevTrigger,
+  CalendarTodayTrigger,
+  CalendarNextTrigger,
+  CalendarDayView,
+  CalendarWeekView,
+  CalendarMonthView,
+  CalendarYearView,
+} from "@/components/ui/full-calendar";
 
 const ChatCalendarPage = () => {
   useEffect(() => {
@@ -22,6 +36,28 @@ const ChatCalendarPage = () => {
     });
   }, []);
 
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+
+  useEffect(() => {
+    setEvents([
+      {
+        id: "1",
+        start: new Date("2025-01-31T09:30:00Z"),
+        end: new Date("2025-01-31T14:30:00Z"),
+        title: "event A",
+        color: "pink",
+      },
+      {
+        id: "2",
+        start: new Date("2025-01-31T10:00:00Z"),
+        end: new Date("2025-01-31T10:30:00Z"),
+        title: "event B",
+        color: "blue",
+      },
+    ]);
+  }, []);
+
   return (
     <div className="flex w-full h-screen bg-white">
       {/* Left Column - Chat */}
@@ -31,9 +67,61 @@ const ChatCalendarPage = () => {
         </div>
       </div>
 
-      {/* Right Column - Calendar Placeholder */}
+      {/* Right Column - Calendar */}
       <div className="w-2/3 h-full bg-white">
-        {/* Calendar widget will be mounted here */}
+        <Calendar events={events} defaultDate={currentDate}>
+          <div className="h-dvh py-6 flex flex-col">
+            <div className="flex px-6 items-center gap-2 mb-6">
+              <CalendarViewTrigger
+                className="aria-[current=true]:bg-accent"
+                view="day"
+              >
+                Day
+              </CalendarViewTrigger>
+              <CalendarViewTrigger
+                view="week"
+                className="aria-[current=true]:bg-accent"
+              >
+                Week
+              </CalendarViewTrigger>
+              <CalendarViewTrigger
+                view="month"
+                className="aria-[current=true]:bg-accent"
+              >
+                Month
+              </CalendarViewTrigger>
+              <CalendarViewTrigger
+                view="year"
+                className="aria-[current=true]:bg-accent"
+              >
+                Year
+              </CalendarViewTrigger>
+
+              <span className="flex-1" />
+
+              <CalendarCurrentDate />
+
+              <CalendarPrevTrigger>
+                <ChevronLeft size={20} />
+                <span className="sr-only">Previous</span>
+              </CalendarPrevTrigger>
+
+              <CalendarTodayTrigger>Today</CalendarTodayTrigger>
+
+              <CalendarNextTrigger>
+                <ChevronRight size={20} />
+                <span className="sr-only">Next</span>
+              </CalendarNextTrigger>
+            </div>
+
+            <div className="flex-1 overflow-auto px-6 relative">
+              <CalendarDayView />
+              <CalendarWeekView />
+              <CalendarMonthView />
+              <CalendarYearView />
+            </div>
+          </div>
+        </Calendar>
       </div>
 
       {/* Custom CSS for black and white theme */}

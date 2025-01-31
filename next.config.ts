@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  reactStrictMode: true,
+  experimental: {
+    optimizePackageImports: ['@n8n/chat'],
+  },
 };
 
 export default nextConfig;
